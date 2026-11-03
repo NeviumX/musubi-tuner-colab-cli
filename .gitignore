@@ -1,0 +1,8 @@
+.state/
+config/config.local.env
+config/**/*.local.toml
+config/**/*.local.txt
+outputs/
+datasets/
+docs/
+__pycache__/

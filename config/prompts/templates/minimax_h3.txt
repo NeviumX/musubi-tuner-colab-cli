@@ -1,0 +1,5 @@
+# 学習中の生成確認に使うプロンプト。これは原本なので書き換えない。
+# 変えるときは config/prompts/minimax_h3.local.txt を作る。そちらがあれば、中身全体を置き換える。
+# 1 行に 1 プロンプト。# の行はコメント。--w --h が大きさ、--s がステップ数、--d がシード。--f 1 で静止画になる
+# H3 にネガティブプロンプトと CFG は無いので、--n と --l と --g は書かない。
+mytrigger, a woman standing in a park, looking at viewer. A silent still image. --w 1024 --h 1024 --f 1 --s 30 --d 42

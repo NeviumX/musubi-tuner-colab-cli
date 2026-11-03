@@ -1,0 +1,66 @@
+# MiniMax H3 の画像 LoRA 学習。動画と音声のモデルを 1 フレームの画像で学習する、Musubi Tuner の実験的な使い方。
+# キーは Musubi Tuner の minimax_h3_train_network.py の引数名で、このまま --config_file として読める。
+# ファイル名だけの値は VM の models フォルダーを指す。config/models.txt にあれば自動でダウンロードする。
+# dataset_config と sample_prompts を省略すると、config/datasets/templates と config/prompts/templates の同じ名前のファイルを使う。
+# これは原本なので書き換えない。変えたいキーだけを config/training/minimax_h3.local.toml に書く。値を "" にするとキーを消せる。
+#
+# H3 は CFG を蒸留したモデルで、普通の損失だけで学習すると数十ステップで絵が崩れる。既定は guidance loss を使う。
+# 無条件の埋め込みはテキストのキャッシュと一緒に自動で作る。学習用アダプターを使うなら local に
+# base_weights = "<アダプターのファイル>"、h3_guidance_loss_scale = ""、h3_guidance_loss_sigma_min = "" と書き、DiT を bf16 にする。
+#
+# 既定は A100 以上の GPU を想定した設定。L4 では local に blocks_to_swap = 40 を書き、
+# [cache_text_encoder_outputs] に text_encoder_blocks_to_swap = 50 を書く。
+# 生成確認はテキストエンコーダーを 25GB ほど GPU に載せるので、既定では止めてある。使うときは local に sample_every_n_epochs = 1 と書く。
+
+[model]
+dit = "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+video_vae = "minimax_h3_video_vae_fp16.safetensors"
+audio_vae = "minimax_h3_audio_vae_fp32.safetensors"
+text_encoder = "qwen3vl_32b_minimax_h3_int8_convrot.safetensors"
+task = "t2va"
+one_frame = true
+video_only = true
+
+[job]
+output_name = "my-minimax-h3-lora"
+
+[network]
+network_module = "networks.lora_minimax_h3"
+network_dim = 16
+network_alpha = 16
+
+[optimizer]
+optimizer_type = "adamw8bit"
+learning_rate = 1e-4
+lr_scheduler = "constant_with_warmup"
+lr_warmup_steps = 50
+
+[guidance_loss]
+h3_guidance_loss_scale = 4.0
+h3_guidance_loss_sigma_min = 0.15
+
+[precision_memory]
+mixed_precision = "bf16"
+sdpa = true
+gradient_checkpointing = true
+max_data_loader_n_workers = 2
+persistent_data_loader_workers = true
+
+[run]
+max_train_epochs = 10
+seed = 42
+
+[saving]
+save_every_n_epochs = 1
+save_state = true
+save_last_n_epochs_state = 1
+
+[sampling]
+sample_every_n_epochs = 0
+
+# キャッシュを作るスクリプトの引数。dataset_config、video_vae、audio_vae、text_encoder、task、one_frame は上の値を使う
+[cache_latents]
+cache_seed = 42
+
+[cache_text_encoder_outputs]
+text_cache_dtype = "bf16"

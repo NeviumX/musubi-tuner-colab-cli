@@ -1,0 +1,58 @@
+# Krea 2 の LoRA 学習。キーは Musubi Tuner の krea2_train_network.py の引数名で、このまま --config_file として読める。
+# ファイル名だけの値は VM の models フォルダーを指す。config/models.txt にあれば自動でダウンロードする。
+# dataset_config と sample_prompts を省略すると、config/datasets/templates と config/prompts/templates の同じ名前のファイルを使う。
+# これは原本なので書き換えない。変えたいキーだけを config/training/krea2.local.toml に書く。値を "" にするとキーを消せる。
+# 生成確認を止めるときは local に sample_every_n_epochs = 0 と書く。
+# RAW で学習し、Turbo で使うのが推奨の使い方。RAW のダウンロードには Hugging Face での同意と HF_TOKEN が要る。
+# 既定は L4 の 22GB に収まるよう、fp8 とブロックのスワップを使う。A100 や H100 なら local に blocks_to_swap = 0 と書くと速くなる。
+# 生成確認を Turbo で行うには local に turbo_dit = "krea2_turbo.safetensors" と blocks_to_swap = 0 を書く。両方は同時に使えない。
+
+[model]
+dit = "krea2_raw.safetensors"
+vae = "qwen_image_vae.safetensors"
+text_encoder = "qwen3vl_4b_bf16.safetensors"
+
+[job]
+output_name = "my-krea2-lora"
+
+[network]
+network_module = "networks.lora_krea2"
+network_dim = 32
+network_alpha = 32
+
+[optimizer]
+optimizer_type = "adamw8bit"
+learning_rate = 1e-4
+
+[flow_matching]
+timestep_sampling = "shift"
+weighting_scheme = "none"
+discrete_flow_shift = 2.5
+
+[precision_memory]
+mixed_precision = "bf16"
+sdpa = true
+gradient_checkpointing = true
+fp8_base = true
+fp8_scaled = true
+blocks_to_swap = 10
+max_data_loader_n_workers = 2
+persistent_data_loader_workers = true
+
+[run]
+max_train_epochs = 10
+seed = 42
+
+[saving]
+save_every_n_epochs = 1
+save_state = true
+save_last_n_epochs_state = 1
+
+[sampling]
+sample_every_n_epochs = 1
+
+# キャッシュを作るスクリプトの引数。dataset_config、vae、text_encoder は上の値を使う
+[cache_latents]
+
+[cache_text_encoder_outputs]
+batch_size = 1

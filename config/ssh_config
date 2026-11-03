@@ -1,0 +1,28 @@
+# Colab VM への SSH 設定。
+# スクリプトはすべて `ssh -F config/ssh_config colab-musubi-tuner` でこのファイルだけを使い、~/.ssh/config は読まない。
+# $COLAB_SESSION には config.env の値が入る。手で接続するときは ./ssh.sh を使う。
+#
+# 注意: colab ssh はランタイムが無いと新しく作る。このファイルで直接 ssh しないこと。
+
+Host colab-musubi-tuner
+    # colab CLI の SSH を ProxyCommand として使う。-i と IdentityFile は同じ鍵にする
+    ProxyCommand colab ssh --proxy-mode -s $COLAB_SESSION -i ~/.ssh/id_ed25519
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    HostName colab-vm
+    User root
+
+    # Colab VM は作り直すたびにホスト鍵が変わるので、保存も検証もしない
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR
+
+    ConnectTimeout 60
+    ServerAliveInterval 30
+    ServerAliveCountMax 4
+
+    # Colab のランタイムには同時に 1 本しか SSH をつなげないので、すべての ssh を 1 本に相乗りさせる。
+    # 共有接続は最後の利用から ControlPersist の時間だけ残る。
+    ControlMaster auto
+    ControlPath ~/.ssh/colab-cm-${COLAB_SESSION}
+    ControlPersist 2m

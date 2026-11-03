@@ -1,0 +1,5 @@
+# 学習中の生成確認に使うプロンプト。これは原本なので書き換えない。
+# 変えるときは config/prompts/krea2.local.txt を作る。そちらがあれば、中身全体を置き換える。
+# 1 行に 1 プロンプト。# の行はコメント。--w --h が大きさ、--s がステップ数、--l が CFG、--d がシード、--n がネガティブ
+# RAW で生成するので CFG を使う。CFG を切るとぼやけるのは RAW では正常。turbo_dit を使うときは --l 1 --s 8 にする。
+mytrigger, a woman standing in a park, looking at viewer --n blurry, low quality --w 1024 --h 1024 --s 30 --l 4 --d 42

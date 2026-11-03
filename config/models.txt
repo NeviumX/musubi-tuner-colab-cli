@@ -1,0 +1,35 @@
+# 学習の TOML に書いたファイル名がここにあれば、VM に無いときに自動でダウンロードする。
+# ファイル名は URL の最後の部分。1 行に 1 つ。# はコメント。「URL ファイル名」と書くと、ファイル名を指定できる。
+# ここに無いモデルは学習の開始時に URL を尋ね、答えを git 管理外の config/models.local.txt に残す。
+
+# Qwen-Image
+https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_bf16.safetensors
+https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_2512_bf16.safetensors
+https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b.safetensors
+https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/vae/qwen_image_vae.safetensors
+
+# Z-Image
+https://huggingface.co/Comfy-Org/z_image/resolve/main/split_files/diffusion_models/z_image_bf16.safetensors
+https://huggingface.co/Comfy-Org/z_image/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors
+https://huggingface.co/Comfy-Org/z_image/resolve/main/split_files/vae/ae.safetensors
+https://huggingface.co/ostris/Z-Image-De-Turbo/resolve/main/z_image_de_turbo_v1_bf16.safetensors
+
+# Krea 2。RAW と Turbo は Hugging Face でライセンスへの同意と HF_TOKEN が必要。ファイル名が一般的なので、名前を付けて保存する
+https://huggingface.co/krea/Krea-2-Raw/resolve/main/raw.safetensors krea2_raw.safetensors
+https://huggingface.co/krea/Krea-2-Turbo/resolve/main/turbo.safetensors krea2_turbo.safetensors
+https://huggingface.co/Comfy-Org/Qwen3-VL/resolve/main/text_encoders/qwen3vl_4b_bf16.safetensors
+
+# MiniMax H3。使う前に https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/LICENSE を読んで同意する
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_bf16.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_int8_convrot.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_bf16.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_int8_convrot.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_bf16.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors
+https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_bf16.safetensors
+# MiniMax H3 の学習用アダプター。base_weights に書く。画像向けと、動画も含む FL2VA 向け
+https://huggingface.co/circlestone-labs/MiniMax-H3-Image-Training-Adapter/resolve/main/minimax_h3_image_training_adapter.safetensors
+https://huggingface.co/ostris/minimax_h3_training_adapter/resolve/main/minimax_h3_training_adapter_v2.safetensors

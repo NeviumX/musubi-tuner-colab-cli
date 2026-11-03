@@ -1,0 +1,5 @@
+# 学習中の生成確認に使うプロンプト。これは原本なので書き換えない。
+# 変えるときは config/prompts/zimage.local.txt を作る。そちらがあれば、中身全体を置き換える。
+# 1 行に 1 プロンプト。# の行はコメント。--w --h が大きさ、--s がステップ数、--l が CFG、--d がシード、--n がネガティブ
+# ベースモデルは CFG 4 が公式の既定。Turbo 向けに De-Turbo で学習するときは --l 1 にする。
+mytrigger, a woman standing in a park, looking at viewer --n blurry, low quality --w 1024 --h 1024 --s 30 --l 4 --d 42
